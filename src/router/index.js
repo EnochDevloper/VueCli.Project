@@ -9,17 +9,22 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'login',
+      component: () => import('@/view/login/index')
+    },
+    {
+      path: '/hello',
       name: 'HelloWorld',
       component: HelloWorld
     },
     {
-      path: '/list',
-      name: 'StuList',
+      path: '/test',
+      name: 'list',
       component: list
     },
     {
       path: '/index',
-        component: () => import('@/view/studnet/Index')
+      component: () => import('@/view/studnet/stuList')
     }
   ]
 })
