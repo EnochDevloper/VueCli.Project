@@ -1,3 +1,17 @@
+<style lang="scss">
+@import url("../../styles/pager.scss");
+
+.el-dialog__header {
+  background-color: #82a7d7 !important;
+}
+.el-dialog__header span {
+  color: white;
+}
+.el-dialog__header button i {
+  color: white;
+}
+</style>
+
 <template>
   <el-row>
     <el-col :lg="12" :md="12" :sm="{span:24}" :xs="{span:24}">
@@ -13,8 +27,8 @@
         <el-table-column prop="s_address" label="地址"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-            <el-button type="text" size="small">查看</el-button>
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small" @click="LookStu">查看</el-button>
+            <el-button type="text" size="small" @click="EditStu">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -88,6 +102,7 @@
             :default-expand-all="true"
             :highlight-current="true"
             :expand-on-click-node="false"
+            :check-on-click-node="true"
             node-key="Id"
             :filter-node-method="filterNode"
             :check-strictly="true"
@@ -97,10 +112,59 @@
         </el-col>
       </el-row>
     </el-col>
+    <el-dialog
+      title="学生信息"
+      ref="stuDialog"
+      :visible.sync="dialogVisible"
+      width="32%"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        id="userform"
+        ref="userform"
+        :model="form"
+        label-position="right"
+        label-width="120px"
+        style="overflow:auto"
+      >
+        <el-row type="flex">
+          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-form-item label="姓名：" prop="s_name">
+              <el-input v-model="form.s_name" class="form-input" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex">
+          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-form-item label="登录名：" prop="s_loginName">
+              <el-input v-model="form.s_loginName" class="form-input" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex">
+          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-form-item label="地址：" prop="s_address">
+              <el-input v-model="form.s_address" class="form-input" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex">
+          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-form-item label="联系电话：" prop="s_phone">
+              <el-input v-model="form.s_phone" class="form-input" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-row>
 </template>
 
-  <script>
+<script>
 import { getStuList, OperatingTable } from "@/api/StudentApi";
 import axios from "axios";
 export default {
@@ -124,7 +188,8 @@ export default {
         PageSize: 5,
         Sort: "s_createDate-desc",
         Order: "asc"
-      } // 用户数据
+      }, // 用户数据
+      dialogVisible: false
     };
   },
   watch: {
@@ -183,7 +248,11 @@ export default {
     }, //清空编辑页面信息
     GetTree() {
       var _this = this;
-      OperatingTable("http://localhost:5280/api/Students/DiGuiCompany")
+      OperatingTable(
+        "http://localhost:5280/api/Students/DiGuiCompany",
+        null,
+        "post"
+      )
         .then(res => {
           _this.treeData = res.data;
         })
@@ -206,6 +275,18 @@ export default {
       _this.heightParm.roleHeight = bodyHeight * 0.7 + "px"; // 角色列表高度
       _this.heightParm.deptHeight = bodyHeight - 130 + "px"; // 组织机构高度
       _this.heightParm.roleAppHeight = bodyHeight * 0.59 + "px"; // 角色应用树形高度
+    },
+    LookStu() {
+      var _this = this;
+      _this.dialogVisible = true;
+    },
+    EditStu() {
+      var _this = this;
+      _this.dialogVisible = true;
+    },
+    handleClose() {
+      var _this = this;
+      _this.dialogVisible = false;
     }
   }
 };

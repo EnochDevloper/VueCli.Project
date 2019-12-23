@@ -15,6 +15,11 @@ export default {
     return {
       taobao: "http://wwww.taobao.com"
     };
+  },
+  methods: {
+    LinkWeiBo() {
+      window.location.href = "http://www.weibo.com";
+    }
   }
 };
 </script>
