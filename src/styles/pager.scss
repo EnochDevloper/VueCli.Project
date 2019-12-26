@@ -1,0 +1,29 @@
+/* 分页控件 样式 */
+/* 分页控件 */
+.el-pager {
+  border: none;
+  font: 18px Arial, Helvetica, sans-serif;
+  margin: 0px;
+}
+
+/*  页码 */
+.el-pager li {
+  color: #488FCD;
+  cursor: pointer;
+  text-decoration: none; 
+  border-left: none;
+  background-color: #FFF;
+}
+
+/* hover 伪类 */
+.el-pager li:hover {
+  background-color: #EEEEEE;
+  text-decoration: none;
+}
+
+/* 当前页 */
+.el-pager li.active {
+  background-color: rgb(202, 227, 248);
+  font-weight: bolder;
+  
+}
