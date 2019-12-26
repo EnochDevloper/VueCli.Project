@@ -11,7 +11,10 @@ const router = new Router({
     {
       path: '/',
       name: 'login',
-      component: () => import('@/view/login/index')
+      component: () => import('@/view/login/index'),
+      meta: {
+        title: "用户登录"
+      }
     },
     {
       path: '/hello',
@@ -33,7 +36,8 @@ const router = new Router({
       path: '/index',
       component: () => import('@/view/studnet/stuList'),
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        title: "学生列表"
       }
     },
 
@@ -63,7 +67,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     if (sessionStorage.getItem("token") == 'true') {
-      next('/index');
+      next();
     } else {
       next();
     }

@@ -10,163 +10,178 @@
 .el-dialog__header button i {
   color: white;
 }
+.col_button {
+  padding: 10px;
+}
 </style>
 
 <template>
-  <el-row>
-    <el-col :lg="12" :md="12" :sm="{span:24}" :xs="{span:24}">
-      <el-table
-        :data="userData.Rows"
-        ref="StudentTable"
-        height="400px"
-        style="width: 100%"
-        @row-click="RowChnage"
+  <basic-container name="basic">
+    <el-row>
+      <el-col class="col_button">
+        <el-button icon="el-icon-refresh" type="success">&nbsp;刷新</el-button>
+        <el-button icon="el-icon-edit" type="primary">&nbsp;编辑</el-button>
+        <el-button icon="el-icon-setting" type="warning">&nbsp;重置密码</el-button>
+        <el-button icon="el-icon-plus" type="danger" @click="LoginOut()">&nbsp;注销账户</el-button>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :lg="12" :md="12" :sm="{span:24}" :xs="{span:24}">
+        <el-table
+          :data="userData.Rows"
+          ref="StudentTable"
+          height="400px"
+          style="width: 100%"
+          @row-click="RowChnage"
+        >
+          <el-table-column prop="s_name" label="姓名" width="180"></el-table-column>
+          <el-table-column prop="s_age" label="年龄" width="180"></el-table-column>
+          <el-table-column prop="s_address" label="地址"></el-table-column>
+          <el-table-column fixed="right" label="操作" width="100">
+            <template slot-scope="scope">
+              <el-button type="text" size="small" @click="LookStu">查看</el-button>
+              <el-button type="text" size="small" @click="EditStu">编辑</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          background
+          :pager-count="pagerCount"
+          :current-page="userData.PageIndex"
+          :page-sizes="pageSizes"
+          :page-size="userData.PageSize"
+          :total="userData.Total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="SizeChange"
+          @current-change="CurrentChange"
+        />
+      </el-col>
+      <el-col :lg="6" :md="6" :sm="{span:24}" :xs="{span:24}" style="padding-left:10px;">
+        <el-form id="userform" ref="userform" :model="form">
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="姓名：" prop="s_name">
+                <el-input v-model="form.s_name" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="登录名" prop="s_loginName">
+                <el-input v-model="form.s_loginName" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="地址" prop="s_address">
+                <el-input v-model="form.s_address" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="联系电话" prop="s_phone">
+                <el-input v-model="form.s_phone" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div class="dialog-footer">
+          <el-button id="btnClear" ref="btnClear" @click="ClearText">清空</el-button>
+        </div>
+      </el-col>
+      <el-col :lg="6" :md="6" :sm="{span:24}" :xs="{span:24}">
+        <el-row style="padding-bottom:10px;">
+          <el-col>
+            <el-input
+              id="companyName"
+              v-model="companyName"
+              type="text"
+              class="searchInput"
+              placeholder="请输入部门名称"
+            >
+              <template slot="prepend">部门</template>
+            </el-input>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-tree
+              ref="tree1"
+              :props="defaultProps"
+              :data="treeData"
+              :default-expand-all="true"
+              :highlight-current="true"
+              :expand-on-click-node="false"
+              :check-on-click-node="true"
+              node-key="Id"
+              :filter-node-method="filterNode"
+              :check-strictly="true"
+              show-checkbox
+              @check-change="treeChange"
+            ></el-tree>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-dialog
+        title="学生信息"
+        ref="stuDialog"
+        :visible.sync="dialogVisible"
+        width="32%"
+        :close-on-click-modal="false"
       >
-        <el-table-column prop="s_name" label="姓名" width="180"></el-table-column>
-        <el-table-column prop="s_age" label="年龄" width="180"></el-table-column>
-        <el-table-column prop="s_address" label="地址"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="100">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="LookStu">查看</el-button>
-            <el-button type="text" size="small" @click="EditStu">编辑</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        background
-        :pager-count="pagerCount"
-        :current-page="userData.PageIndex"
-        :page-sizes="pageSizes"
-        :page-size="userData.PageSize"
-        :total="userData.Total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="SizeChange"
-        @current-change="CurrentChange"
-      />
-    </el-col>
-    <el-col :lg="6" :md="6" :sm="{span:24}" :xs="{span:24}" style="padding-left:10px;">
-      <el-form id="userform" ref="userform" :model="form">
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="姓名：" prop="s_name">
-              <el-input v-model="form.s_name" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="登录名" prop="s_loginName">
-              <el-input v-model="form.s_loginName" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="地址" prop="s_address">
-              <el-input v-model="form.s_address" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="联系电话" prop="s_phone">
-              <el-input v-model="form.s_phone" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div class="dialog-footer">
-        <el-button id="btnClear" ref="btnClear" @click="ClearText">清空</el-button>
-      </div>
-    </el-col>
-    <el-col :lg="6" :md="6" :sm="{span:24}" :xs="{span:24}">
-      <el-row style="padding-bottom:10px;">
-        <el-col>
-          <el-input
-            id="companyName"
-            v-model="companyName"
-            type="text"
-            class="searchInput"
-            placeholder="请输入部门名称"
-          >
-            <template slot="prepend">部门</template>
-          </el-input>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <el-tree
-            ref="tree1"
-            :props="defaultProps"
-            :data="treeData"
-            :default-expand-all="true"
-            :highlight-current="true"
-            :expand-on-click-node="false"
-            :check-on-click-node="true"
-            node-key="Id"
-            :filter-node-method="filterNode"
-            :check-strictly="true"
-            show-checkbox
-            @check-change="treeChange"
-          ></el-tree>
-        </el-col>
-      </el-row>
-    </el-col>
-    <el-dialog
-      title="学生信息"
-      ref="stuDialog"
-      :visible.sync="dialogVisible"
-      width="32%"
-      :close-on-click-modal="false"
-    >
-      <el-form
-        id="userform"
-        ref="userform"
-        :model="form"
-        label-position="right"
-        label-width="120px"
-        style="overflow:auto"
-      >
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="姓名：" prop="s_name">
-              <el-input v-model="form.s_name" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="登录名：" prop="s_loginName">
-              <el-input v-model="form.s_loginName" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="地址：" prop="s_address">
-              <el-input v-model="form.s_address" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row type="flex">
-          <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
-            <el-form-item label="联系电话：" prop="s_phone">
-              <el-input v-model="form.s_phone" class="form-input" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-  </el-row>
+        <el-form
+          id="userform"
+          ref="userform"
+          :model="form"
+          label-position="right"
+          label-width="120px"
+          style="overflow:auto"
+        >
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="姓名：" prop="s_name">
+                <el-input v-model="form.s_name" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="登录名：" prop="s_loginName">
+                <el-input v-model="form.s_loginName" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="地址：" prop="s_address">
+                <el-input v-model="form.s_address" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+              <el-form-item label="联系电话：" prop="s_phone">
+                <el-input v-model="form.s_phone" class="form-input" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+    </el-row>
+  </basic-container>
 </template>
 
 <script>
-import { getStuList, OperatingTable } from "@/api/StudentApi";
-import axios from "axios";
+import { OperatingTable } from "@/api/StudentApi";
+import { Message } from "element-ui";
+import Cookies from "js-cookie";
+
 export default {
   data() {
     return {
@@ -276,17 +291,38 @@ export default {
       _this.heightParm.deptHeight = bodyHeight - 130 + "px"; // 组织机构高度
       _this.heightParm.roleAppHeight = bodyHeight * 0.59 + "px"; // 角色应用树形高度
     },
+    //查看学生信息
     LookStu() {
       var _this = this;
       _this.dialogVisible = true;
     },
+    //编辑学生信息
     EditStu() {
       var _this = this;
       _this.dialogVisible = true;
     },
+    //关闭弹出前的操作
     handleClose() {
       var _this = this;
       _this.dialogVisible = false;
+    },
+    //注销功能
+    LoginOut() {
+      var _this = this;
+      var data = Cookies.get("data");
+      _this
+        .$confirm("是否确定注销用户" + data.s_name, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(() => {
+          sessionStorage.removeItem("token");
+          _this.$router.push("/");
+        })
+        .catch(() => {
+          Message.info("已取消注销账户");
+        });
     }
   }
 };

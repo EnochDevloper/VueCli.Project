@@ -7,10 +7,19 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueWechatTitle from 'vue-wechat-title';
+import basicContainer from './components/basic-container/base'
+import store from './store/index'
+
+import '@/icons' // icon
 
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
+Vue.use(VueWechatTitle)
+
+// 注册全局容器
+Vue.component('basicContainer', basicContainer)
 
 Vue.config.productionTip = false
 
@@ -18,6 +27,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import { getStuList, OperatingTable } from "@/api/StudentApi";
+import { OperatingTable } from "@/api/StudentApi";
+import Cookies from "js-cookie";
 
 export default {
   name: "Login",
@@ -63,13 +64,19 @@ export default {
               if (res.status == 200) {
                 var success = res.data.IsSuccess;
                 if (success) {
+                  var m_studnet = res.data.data;
+                  Cookies.set("token", "true");
+                  Cookies.set("account", this.form.username);
+                  Cookies.set("data", m_studnet);
+
+                  sessionStorage.setItem("token", "true");
                   // 使用 vue-router 路由到指定页面，该方式称之为编程式导航
-                  this.$router.push("/index");
+                  _this.$router.push("/index");
                 } else {
-                  this.$message.error(res.data.Message);
+                  _this.$message.error(res.data.Message);
                 }
               } else {
-                this.$message.error("系统异常,请稍候再试...");
+                _this.$message.error("系统异常,请稍候再试...");
               }
             })
             .catch(err => {

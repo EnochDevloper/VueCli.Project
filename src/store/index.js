@@ -1,16 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import getters from './getters'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
+
 const store = new Vuex.Store({
-  modules: {
-    user,
-    common,
-    logs,
-    tags
+  state: {
+    token: localStorage.getItem('token') ? localStorage.getItem('token') : ''
   },
-  getters
+  mutotions: {
+    setToken(state, token) {
+      state.token = token;
+      localStorage.setItem("token", token.token);
+    },
+    delToken(state) {
+      state.token = '';
+      localStorage.removeItem("token");
+    }
+  }
 })
 
-export default store
+export default store;

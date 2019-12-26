@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <router-view />
-    <router-link to="http://www.baidu.com">[跳转到百度]</router-link>
+    <router-view v-wechat-title="$route.meta.title" />
+    <!-- <router-view /> -->
+    <!-- <router-link to="http://www.baidu.com">[跳转到百度]</router-link>
     <router-link :to="taobao">[淘宝]</router-link>
     <router-link to="/login">[登录]</router-link>
-    <router-link to="/logout">[登出]</router-link>
+    <router-link to="/logout">[登出]</router-link>-->
   </div>
 </template>
 
