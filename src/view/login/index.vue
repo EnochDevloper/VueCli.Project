@@ -25,6 +25,7 @@
 <script>
 import { OperatingTable } from "@/api/StudentApi";
 import Cookies from "js-cookie";
+import qs from "qs";
 
 export default {
   name: "Login",
@@ -65,9 +66,10 @@ export default {
                 var success = res.data.IsSuccess;
                 if (success) {
                   var m_studnet = res.data.data;
+                  var model = qs.stringify(m_studnet);
                   Cookies.set("token", "true");
                   Cookies.set("account", this.form.username);
-                  Cookies.set("data", m_studnet);
+                  Cookies.set("data", model);
 
                   sessionStorage.setItem("token", "true");
                   // 使用 vue-router 路由到指定页面，该方式称之为编程式导航

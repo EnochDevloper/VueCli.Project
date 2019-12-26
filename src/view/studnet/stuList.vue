@@ -18,11 +18,16 @@
 <template>
   <basic-container name="basic">
     <el-row>
+      <div class="box">
+        <span :style="{backgroundColor:'#6ba2d6'}" class="container">
+          <i icon-class="wechat" class="iconfont icon-weixin" />
+        </span>
+      </div>
       <el-col class="col_button">
         <el-button icon="el-icon-refresh" type="success">&nbsp;刷新</el-button>
         <el-button icon="el-icon-edit" type="primary">&nbsp;编辑</el-button>
         <el-button icon="el-icon-setting" type="warning">&nbsp;重置密码</el-button>
-        <el-button icon="el-icon-plus" type="danger" @click="LoginOut()">&nbsp;注销账户</el-button>
+        <el-button icon="el-icon-remove-outline" type="danger" @click="LoginOut()">&nbsp;注销账户</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -181,6 +186,7 @@
 import { OperatingTable } from "@/api/StudentApi";
 import { Message } from "element-ui";
 import Cookies from "js-cookie";
+import qs from "qs";
 
 export default {
   data() {
@@ -309,9 +315,12 @@ export default {
     //注销功能
     LoginOut() {
       var _this = this;
+
       var data = Cookies.get("data");
+      var m_student = qs.parse(data);
+
       _this
-        .$confirm("是否确定注销用户" + data.s_name, "提示", {
+        .$confirm("是否确定注销用户" + m_student.s_name, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
