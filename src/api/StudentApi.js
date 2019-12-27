@@ -1,4 +1,4 @@
-import request from "@/utils/http";   //导入axios实例文件中方法
+import request from "@/router/http";   //导入axios实例文件中方法
 
 // export const getStuList = (url, parm) => {
 //   return post(url, parm); //resfulapi风格

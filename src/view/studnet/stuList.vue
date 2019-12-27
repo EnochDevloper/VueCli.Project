@@ -326,7 +326,7 @@ export default {
           type: "warning"
         })
         .then(() => {
-          sessionStorage.removeItem("token");
+          // sessionStorage.removeItem("token");
           _this.$router.push("/");
         })
         .catch(() => {
