@@ -26,7 +26,7 @@
       <el-col class="col_button">
         <el-button icon="el-icon-refresh" type="success">&nbsp;刷新</el-button>
         <el-button icon="el-icon-edit" type="primary">&nbsp;编辑</el-button>
-        <el-button icon="el-icon-setting" type="warning">&nbsp;重置密码</el-button>
+        <el-button icon="el-icon-setting" type="warning" @click="ResetPwd()">&nbsp;重置密码</el-button>
         <el-button icon="el-icon-remove-outline" type="danger" @click="LoginOut()">&nbsp;注销账户</el-button>
       </el-col>
     </el-row>
@@ -147,6 +147,7 @@
           <el-row type="flex">
             <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
               <el-form-item label="姓名：" prop="s_name">
+                <input type="hidden" v-model="form.s_Grade_ID" />
                 <el-input v-model="form.s_name" class="form-input" />
               </el-form-item>
             </el-col>
@@ -175,7 +176,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="ConfirmEdit()">确 定</el-button>
         </span>
       </el-dialog>
     </el-row>
@@ -269,11 +270,7 @@ export default {
     }, //清空编辑页面信息
     GetTree() {
       var _this = this;
-      OperatingTable(
-        "http://localhost:5280/api/Students/DiGuiCompany",
-        null,
-        "post"
-      )
+      OperatingTable("/Students/DiGuiCompany", null, "post")
         .then(res => {
           _this.treeData = res.data;
         })
@@ -311,6 +308,62 @@ export default {
     handleClose() {
       var _this = this;
       _this.dialogVisible = false;
+    },
+    //重置密码功能
+    ResetPwd() {
+      var _this = this;
+      var id = _this.form.s_id;
+      if (id) {
+        this.$confirm("是否确定重置密码?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            OperatingTable("/Students/ResetPassWord", { sid: id }, "post")
+              .then(res => {
+                if (res.status == 200) {
+                  if (res.data.IsSuccess) {
+                    Message.success(res.data.Message);
+                  }
+                } else {
+                  Message.info(res.data.Message);
+                }
+              })
+              .catch(err => {
+                Message.error(err);
+              });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消重置"
+            });
+          });
+      } else {
+        Message.info("请选择用户重置密码");
+      }
+    },
+    //确定编辑保存
+    ConfirmEdit() {
+      var _this = this;
+      var data = _this.form;
+      OperatingTable("/Students/UpdateStu", data, "post")
+        .then(res => {
+          if (res.status == 200) {
+            if (res.data.IsSuccess) {
+              Message.success(res.data.Message);
+              setTimeout(() => {
+                _this.dialogVisible = false;
+              }, 500);
+            } else {
+              Message.info(res.data.Message);
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //注销功能
     LoginOut() {
