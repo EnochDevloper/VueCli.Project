@@ -15,7 +15,6 @@ let service = axios.create({
 
 // 拦截请求
 service.interceptors.request.use((config) => {
-  debugger;
   if (config.method === 'post') {
     config.data = qs.stringify(config.data);
     config.url += "?" + config.data;

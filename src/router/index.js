@@ -20,23 +20,31 @@ const router = new Router({
       path: '/hello',
       name: 'HelloWorld',
       component: HelloWorld,
-      meta: {
-        requireAuth: true
-      }
+      // meta: {
+      //   requireAuth: true
+      // }
     },
     {
       path: '/test',
       name: 'list',
       component: list,
+      // meta: {
+      //   requireAuth: true
+      // }
+    },
+    {
+      path: '/rate',
+      component: () => import('@/view/studnet/rate'),
       meta: {
-        requireAuth: true
+        title: "测试数据"
+        // requireAuth: true
       }
     },
     {
       path: '/index',
       component: () => import('@/view/studnet/stuList'),
       meta: {
-        requireAuth: true,
+        // requireAuth: true,
         title: "学生列表"
       }
     },

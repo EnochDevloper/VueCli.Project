@@ -10,9 +10,9 @@
 .el-dialog__header button i {
   color: white;
 }
-.col_button {
-  padding: 10px;
-}
+// .col_button {
+//   padding: 10px;
+// }
 </style>
 
 <template>
@@ -25,7 +25,7 @@
       </div>
       <el-col class="col_button">
         <el-button icon="el-icon-refresh" type="success">&nbsp;刷新</el-button>
-        <el-button icon="el-icon-edit" type="primary">&nbsp;编辑</el-button>
+        <el-button icon="el-icon-edit" type="primary" @click="HandleEdit()">&nbsp;编辑</el-button>
         <el-button icon="el-icon-setting" type="warning" @click="ResetPwd()">&nbsp;重置密码</el-button>
         <el-button icon="el-icon-remove-outline" type="danger" @click="LoginOut()">&nbsp;注销账户</el-button>
       </el-col>
@@ -364,6 +364,15 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    //表格外的编辑按钮
+    HandleEdit() {
+      var _this = this;
+      if (_this.form.s_id) {
+        _this.dialogVisible = true;
+      } else {
+        Message.warning("请选择需要编辑的用户");
+      }
     },
     //注销功能
     LoginOut() {
