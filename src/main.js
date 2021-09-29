@@ -10,13 +10,18 @@ import VueAxios from 'vue-axios'
 import VueWechatTitle from 'vue-wechat-title';
 import basicContainer from './components/basic-container/base'
 import store from './store/index'
-
 import '@/icons' // icon
+import Avue from '@smallwei/avue'
+import '@smallwei/avue/lib/index.css'
 
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
 Vue.use(VueWechatTitle)
+Vue.use(Avue)
+
+// 引入mockjs
+require('./mock.js')
 
 // 注册全局容器
 Vue.component('basicContainer', basicContainer)
