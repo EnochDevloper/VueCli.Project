@@ -19,19 +19,28 @@
   <basic-container name="basic">
     <el-row>
       <div class="box">
-        <span :style="{backgroundColor:'#6ba2d6'}" class="container">
+        <span :style="{ backgroundColor: '#6ba2d6' }" class="container">
           <i icon-class="wechat" class="iconfont icon-weixin" />
         </span>
       </div>
       <el-col class="col_button">
         <el-button icon="el-icon-refresh" type="success">&nbsp;刷新</el-button>
-        <el-button icon="el-icon-edit" type="primary" @click="HandleEdit()">&nbsp;编辑</el-button>
-        <el-button icon="el-icon-setting" type="warning" @click="ResetPwd()">&nbsp;重置密码</el-button>
-        <el-button icon="el-icon-remove-outline" type="danger" @click="LoginOut()">&nbsp;注销账户</el-button>
+        <el-button icon="el-icon-edit" type="primary" @click="HandleEdit()"
+          >&nbsp;编辑</el-button
+        >
+        <el-button icon="el-icon-setting" type="warning" @click="ResetPwd()"
+          >&nbsp;重置密码</el-button
+        >
+        <el-button
+          icon="el-icon-remove-outline"
+          type="danger"
+          @click="LoginOut()"
+          >&nbsp;注销账户</el-button
+        >
       </el-col>
     </el-row>
     <el-row>
-      <el-col :lg="12" :md="12" :sm="{span:24}" :xs="{span:24}">
+      <el-col :lg="12" :md="12" :sm="{ span: 24 }" :xs="{ span: 24 }">
         <el-table
           :data="userData.Rows"
           ref="StudentTable"
@@ -39,13 +48,25 @@
           style="width: 100%"
           @row-click="RowChnage"
         >
-          <el-table-column prop="s_name" label="姓名" width="180"></el-table-column>
-          <el-table-column prop="s_age" label="年龄" width="180"></el-table-column>
+          <el-table-column
+            prop="s_name"
+            label="姓名"
+            width="180"
+          ></el-table-column>
+          <el-table-column
+            prop="s_age"
+            label="年龄"
+            width="180"
+          ></el-table-column>
           <el-table-column prop="s_address" label="地址"></el-table-column>
           <el-table-column fixed="right" label="操作" width="100">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="LookStu">查看</el-button>
-              <el-button type="text" size="small" @click="EditStu">编辑</el-button>
+              <el-button type="text" size="small" @click="LookStu"
+                >查看</el-button
+              >
+              <el-button type="text" size="small" @click="EditStu"
+                >编辑</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -61,43 +82,71 @@
           @current-change="CurrentChange"
         />
       </el-col>
-      <el-col :lg="6" :md="6" :sm="{span:24}" :xs="{span:24}" style="padding-left:10px;">
+      <el-col
+        :lg="6"
+        :md="6"
+        :sm="{ span: 24 }"
+        :xs="{ span: 24 }"
+        style="padding-left: 10px"
+      >
         <el-form id="userform" ref="userform" :model="form">
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="姓名：" prop="s_name">
                 <el-input v-model="form.s_name" class="form-input" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="登录名" prop="s_loginName">
                 <el-input v-model="form.s_loginName" class="form-input" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="地址" prop="s_address">
                 <el-input v-model="form.s_address" class="form-input" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="联系电话" prop="s_phone">
                 <el-input v-model="form.s_phone" class="form-input" />
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row type="flex">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
+              <el-form-item label="上传" prop="s_uploadFile">
+                <el-upload
+                  class="upload-demo"
+                  action="#"
+                  :on-preview="handlePreview"
+                  :on-remove="handleRemove"
+                  :file-list="fileList"
+                  :auto-upload="false"
+                  list-type="picture"
+                >
+                  <el-button size="small" type="primary">点击上传</el-button>
+                  <div slot="tip" class="el-upload__tip">
+                    只能上传jpg/png文件，且不超过500kb
+                  </div>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <div class="dialog-footer">
-          <el-button id="btnClear" ref="btnClear" @click="ClearText">清空</el-button>
+          <el-button id="btnClear" ref="btnClear" @click="ClearText"
+            >清空</el-button
+          >
         </div>
       </el-col>
-      <el-col :lg="6" :md="6" :sm="{span:24}" :xs="{span:24}">
-        <el-row style="padding-bottom:10px;">
+      <el-col :lg="6" :md="6" :sm="{ span: 24 }" :xs="{ span: 24 }">
+        <el-row style="padding-bottom: 10px">
           <el-col>
             <el-input
               id="companyName"
@@ -142,10 +191,10 @@
           :model="form"
           label-position="right"
           label-width="120px"
-          style="overflow:auto"
+          style="overflow: auto"
         >
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="姓名：" prop="s_name">
                 <input type="hidden" v-model="form.s_Grade_ID" />
                 <el-input v-model="form.s_name" class="form-input" />
@@ -153,21 +202,21 @@
             </el-col>
           </el-row>
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="登录名：" prop="s_loginName">
                 <el-input v-model="form.s_loginName" class="form-input" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="地址：" prop="s_address">
                 <el-input v-model="form.s_address" class="form-input" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row type="flex">
-            <el-col :lg="24" :md="24" :sm="{span:24}" :xs="{span:24}">
+            <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="联系电话：" prop="s_phone">
                 <el-input v-model="form.s_phone" class="form-input" />
               </el-form-item>
@@ -184,7 +233,7 @@
 </template>
 
 <script>
-import { OperatingTable } from "@/api/StudentApi";
+import { OperatingTable, GetStuAllList } from "@/api/StudentApi";
 import { Message } from "element-ui";
 import Cookies from "js-cookie";
 import qs from "qs";
@@ -196,7 +245,7 @@ export default {
       defaultProps: {
         // 树形绑定数据结构名称
         children: "Children",
-        label: "Label"
+        label: "Label",
       },
       companyName: "", //部门名称
       pageSizes: [5, 10, 20, 50],
@@ -209,9 +258,9 @@ export default {
         PageIndex: 1,
         PageSize: 5,
         Sort: "s_createDate-desc",
-        Order: "asc"
+        Order: "asc",
       }, // 用户数据
-      dialogVisible: false
+      dialogVisible: false,
     };
   },
   watch: {
@@ -219,7 +268,7 @@ export default {
     companyName(val) {
       // 用过滤器进行 搜索
       this.$refs.tree1.filter(val);
-    }
+    },
   },
   created() {
     this.init();
@@ -239,11 +288,10 @@ export default {
         page: _this.userData.PageIndex,
         pageSize: _this.userData.PageSize,
         searchs: null,
-        sortName: _this.userData.Sort
+        sortName: _this.userData.Sort,
       };
-      var url = "/Students/GetStudentByCondition";
 
-      OperatingTable(url, params, "post").then(data => {
+      GetStuAllList(params).then(function (data) {
         _this.userData = data.data;
       });
     }, //获取学生数据
@@ -271,14 +319,14 @@ export default {
     GetTree() {
       var _this = this;
       OperatingTable("/Students/DiGuiCompany", null, "post")
-        .then(res => {
+        .then((res) => {
           _this.treeData = res.data;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }, //获取部门树
-    treeChange: function(node, isCheck) {
+    treeChange: function (node, isCheck) {
       console.log(node);
     }, //部门树选中 某个节点
     init() {
@@ -317,11 +365,11 @@ export default {
         this.$confirm("是否确定重置密码?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         })
           .then(() => {
             OperatingTable("/Students/ResetPassWord", { sid: id }, "post")
-              .then(res => {
+              .then((res) => {
                 if (res.status == 200) {
                   if (res.data.IsSuccess) {
                     Message.success(res.data.Message);
@@ -330,14 +378,14 @@ export default {
                   Message.info(res.data.Message);
                 }
               })
-              .catch(err => {
+              .catch((err) => {
                 Message.error(err);
               });
           })
           .catch(() => {
             this.$message({
               type: "info",
-              message: "已取消重置"
+              message: "已取消重置",
             });
           });
       } else {
@@ -349,7 +397,7 @@ export default {
       var _this = this;
       var data = _this.form;
       OperatingTable("/Students/UpdateStu", data, "post")
-        .then(res => {
+        .then((res) => {
           if (res.status == 200) {
             if (res.data.IsSuccess) {
               Message.success(res.data.Message);
@@ -361,7 +409,7 @@ export default {
             }
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -385,7 +433,7 @@ export default {
         .$confirm("是否确定注销用户" + m_student.s_name, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         })
         .then(() => {
           // sessionStorage.removeItem("token");
@@ -394,7 +442,7 @@ export default {
         .catch(() => {
           Message.info("已取消注销账户");
         });
-    }
-  }
+    },
+  },
 };
 </script>

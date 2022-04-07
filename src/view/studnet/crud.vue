@@ -9,6 +9,7 @@
       @search-change="searchChange"
       @size-change="sizeChange"
       @current-change="currentChange"
+      @refresh-change="RefreshPage"
       v-model="form"
     ></avue-crud>
   </basic-container>
@@ -20,6 +21,8 @@ import qs from "qs";
 export default {
   data() {
     return {
+      searchBeginDate: "2021-01-01 00:00:00",
+      searchEndDate: "2021-06-01 00:00:00",
       userData: {
         Total: 0,
         Rows: [],
@@ -33,10 +36,10 @@ export default {
         total: 0,
         background: false,
         pageSize: 5,
-      },
+      }, //分页参数
+      form: {}, //单个实体
+      params: {}, //查询参数
       search: {},
-      form: {},
-      params: {},
       option: {
         align: "center",
         menuAlign: "center",
@@ -53,6 +56,20 @@ export default {
             prop: "s_loginName",
           },
           {
+            label: "性别",
+            prop: "s_sex",
+            formatter: function (data, value) {
+              return value == "0" ? "男" : "女";
+            },
+            type: "select",
+            dicData: [
+              { label: "男", value: 0 },
+              { label: "女", value: 1 },
+            ],
+            // addDisplay: false,
+            // editDisplay: false,
+          },
+          {
             label: "地址",
             prop: "s_address",
             search: true,
@@ -62,8 +79,19 @@ export default {
             prop: "s_phone",
           },
           {
+            label: "创建时间",
+            prop: "s_createDate",
+            type: "date",
+            format: "yyyy-MM-dd hh:mm:ss",
+            valueFormat: "yyyy-MM-dd hh:mm:ss",
+            search: true,
+            searchRange: true,
+            searchSpan: 12,
+          },
+          {
             label: "备注",
             prop: "s_remark",
+            search: true,
           },
         ],
       },
@@ -84,8 +112,7 @@ export default {
           page: this.page.currentPage,
           pageSize: this.page.pageSize,
           sortName: this.userData.Sort,
-          s_name: "",
-          s_address: "",
+          searchs: null,
         };
       }
       var params = _this.params;
@@ -102,15 +129,40 @@ export default {
     //搜索
     searchChange(params, done) {
       done();
+      var condition = [
+        {
+          property: "s_name/s_loginName",
+          value: params.s_name || "",
+          method: "Contains",
+        },
+        {
+          property: "s_address",
+          value: params.s_address || "",
+          method: "==",
+        },
+        {
+          property: "s_remark",
+          value: params.s_remark || "",
+          method: "Contains",
+        },
+        {
+          property: "s_createDate",
+          value:
+            params.s_createDate == undefined
+              ? ""
+              : params.s_createDate[0] + "," + params.s_createDate[1] || "",
+          method: "DateTime",
+        },
+      ];
+
+      var searchs = JSON.stringify(condition);
+
       this.params = {
         page: 1,
         pageSize: this.userData.PageSize,
         sortName: this.userData.Sort,
-        s_name: params.s_name || "",
-        // s_address: params.s_address || "",
+        searchs,
       };
-      debugger;
-      this.params.s_address = params.s_address || "";
       this.GetList();
     },
     //显示条数变化
@@ -122,6 +174,11 @@ export default {
     //选页码
     currentChange(val) {
       this.params.page = val;
+      this.GetList();
+    },
+    //刷新页面
+    RefreshPage() {
+      this.params.page = 1;
       this.GetList();
     },
   },

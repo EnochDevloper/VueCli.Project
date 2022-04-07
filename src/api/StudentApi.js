@@ -24,3 +24,12 @@ export function OperatingTable(url, parm, method) {
     })
   }
 }
+
+/**
+ * 获取所有用户信息
+ */
+export function GetStuAllList(parm) {
+  var url = "/Students/GetStudentByCondition";
+
+  return OperatingTable(url, parm, "post")
+}
