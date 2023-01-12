@@ -4,12 +4,15 @@
 .el-dialog__header {
   background-color: #82a7d7 !important;
 }
+
 .el-dialog__header span {
   color: white;
 }
+
 .el-dialog__header button i {
   color: white;
 }
+
 // .col_button {
 //   padding: 10px;
 // }
@@ -25,70 +28,29 @@
       </div>
       <el-col class="col_button">
         <el-button icon="el-icon-refresh" type="success">&nbsp;刷新</el-button>
-        <el-button icon="el-icon-edit" type="primary" @click="HandleEdit()"
-          >&nbsp;编辑</el-button
-        >
-        <el-button icon="el-icon-setting" type="warning" @click="ResetPwd()"
-          >&nbsp;重置密码</el-button
-        >
-        <el-button
-          icon="el-icon-remove-outline"
-          type="danger"
-          @click="LoginOut()"
-          >&nbsp;注销账户</el-button
-        >
+        <el-button icon="el-icon-edit" type="primary" @click="HandleEdit()">&nbsp;编辑</el-button>
+        <el-button icon="el-icon-setting" type="warning" @click="ResetPwd()">&nbsp;重置密码</el-button>
+        <el-button icon="el-icon-remove-outline" type="danger" @click="LoginOut()">&nbsp;注销账户</el-button>
       </el-col>
     </el-row>
     <el-row>
       <el-col :lg="12" :md="12" :sm="{ span: 24 }" :xs="{ span: 24 }">
-        <el-table
-          :data="userData.Rows"
-          ref="StudentTable"
-          height="400px"
-          style="width: 100%"
-          @row-click="RowChnage"
-        >
-          <el-table-column
-            prop="s_name"
-            label="姓名"
-            width="180"
-          ></el-table-column>
-          <el-table-column
-            prop="s_age"
-            label="年龄"
-            width="180"
-          ></el-table-column>
+        <el-table :data="userData.Rows" ref="StudentTable" height="400px" style="width: 100%" @row-click="RowChnage">
+          <el-table-column prop="s_name" label="姓名" width="180"></el-table-column>
+          <el-table-column prop="s_age" label="年龄" width="180"></el-table-column>
           <el-table-column prop="s_address" label="地址"></el-table-column>
           <el-table-column fixed="right" label="操作" width="100">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="LookStu"
-                >查看</el-button
-              >
-              <el-button type="text" size="small" @click="EditStu"
-                >编辑</el-button
-              >
+              <el-button type="text" size="small" @click="LookStu">查看</el-button>
+              <el-button type="text" size="small" @click="EditStu">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-          background
-          :pager-count="pagerCount"
-          :current-page="userData.PageIndex"
-          :page-sizes="pageSizes"
-          :page-size="userData.PageSize"
-          :total="userData.Total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="SizeChange"
-          @current-change="CurrentChange"
-        />
+        <el-pagination background :pager-count="pagerCount" :current-page="userData.PageIndex" :page-sizes="pageSizes"
+          :page-size="userData.PageSize" :total="userData.Total" layout="total, sizes, prev, pager, next, jumper"
+          @size-change="SizeChange" @current-change="CurrentChange" />
       </el-col>
-      <el-col
-        :lg="6"
-        :md="6"
-        :sm="{ span: 24 }"
-        :xs="{ span: 24 }"
-        style="padding-left: 10px"
-      >
+      <el-col :lg="6" :md="6" :sm="{ span: 24 }" :xs="{ span: 24 }" style="padding-left: 10px">
         <el-form id="userform" ref="userform" :model="form">
           <el-row type="flex">
             <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
@@ -121,15 +83,8 @@
           <el-row type="flex">
             <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="上传" prop="s_uploadFile">
-                <el-upload
-                  class="upload-demo"
-                  action="#"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :file-list="fileList"
-                  :auto-upload="false"
-                  list-type="picture"
-                >
+                <el-upload class="upload-demo" action="#" :on-preview="handlePreview" :on-remove="handleRemove"
+                  :file-list="fileList" :auto-upload="false" list-type="picture">
                   <el-button size="small" type="primary">点击上传</el-button>
                   <div slot="tip" class="el-upload__tip">
                     只能上传jpg/png文件，且不超过500kb
@@ -140,59 +95,29 @@
           </el-row>
         </el-form>
         <div class="dialog-footer">
-          <el-button id="btnClear" ref="btnClear" @click="ClearText"
-            >清空</el-button
-          >
+          <el-button id="btnClear" ref="btnClear" @click="ClearText">清空</el-button>
         </div>
       </el-col>
       <el-col :lg="6" :md="6" :sm="{ span: 24 }" :xs="{ span: 24 }">
         <el-row style="padding-bottom: 10px">
           <el-col>
-            <el-input
-              id="companyName"
-              v-model="companyName"
-              type="text"
-              class="searchInput"
-              placeholder="请输入部门名称"
-            >
+            <el-input id="companyName" v-model="companyName" type="text" class="searchInput" placeholder="请输入部门名称">
               <template slot="prepend">部门</template>
             </el-input>
           </el-col>
         </el-row>
         <el-row>
           <el-col>
-            <el-tree
-              ref="tree1"
-              :props="defaultProps"
-              :data="treeData"
-              :default-expand-all="true"
-              :highlight-current="true"
-              :expand-on-click-node="false"
-              :check-on-click-node="true"
-              node-key="Id"
-              :filter-node-method="filterNode"
-              :check-strictly="true"
-              show-checkbox
-              @check-change="treeChange"
-            ></el-tree>
+            <el-tree ref="tree1" :props="defaultProps" :data="treeData" :default-expand-all="true"
+              :highlight-current="true" :expand-on-click-node="false" :check-on-click-node="true" node-key="Id"
+              :filter-node-method="filterNode" :check-strictly="true" show-checkbox @check-change="treeChange">
+            </el-tree>
           </el-col>
         </el-row>
       </el-col>
-      <el-dialog
-        title="学生信息"
-        ref="stuDialog"
-        :visible.sync="dialogVisible"
-        width="32%"
-        :close-on-click-modal="false"
-      >
-        <el-form
-          id="userform"
-          ref="userform"
-          :model="form"
-          label-position="right"
-          label-width="120px"
-          style="overflow: auto"
-        >
+      <el-dialog title="学生信息" ref="stuDialog" :visible.sync="dialogVisible" width="32%" :close-on-click-modal="false">
+        <el-form id="userform" ref="userform" :model="form" label-position="right" label-width="120px"
+          style="overflow: auto">
           <el-row type="flex">
             <el-col :lg="24" :md="24" :sm="{ span: 24 }" :xs="{ span: 24 }">
               <el-form-item label="姓名：" prop="s_name">
@@ -261,6 +186,7 @@ export default {
         Order: "asc",
       }, // 用户数据
       dialogVisible: false,
+      fileList: []
     };
   },
   watch: {
@@ -443,6 +369,10 @@ export default {
           Message.info("已取消注销账户");
         });
     },
+    handlePreview: function () {
+
+    },
+    handleRemove: function () { }
   },
 };
 </script>

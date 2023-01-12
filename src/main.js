@@ -13,12 +13,16 @@ import store from './store/index'
 import '@/icons' // icon
 import Avue from '@smallwei/avue'
 import '@smallwei/avue/lib/index.css'
+import moment from 'moment'
 
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.use(VueAxios, axios)
 Vue.use(VueWechatTitle)
 Vue.use(Avue)
+
+moment.suppressDeprecationWarnings = true; // 关闭警告
+Vue.prototype.$moment = moment;
 
 // 引入mockjs
 require('./mock.js')

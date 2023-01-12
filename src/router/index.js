@@ -33,6 +33,25 @@ const router = new Router({
       }
     },
     {
+      path: '/vTest',
+      name: 'vTest',
+      component: () => import('@/view/vueTest/index'),
+      meta: {
+        title: "Vue基础功能"
+        // requireAuth: true
+      }
+    },
+
+    {
+      path: '/draw',
+      name: 'draw',
+      component: () => import('@/view/vueTest/draw'),
+      meta: {
+        title: "抽屉打开测试"
+        // requireAuth: true
+      }
+    },
+    {
       path: '/rate',
       component: () => import('@/view/studnet/rate'),
       meta: {
@@ -45,6 +64,14 @@ const router = new Router({
       component: () => import('@/view/studnet/crud'),
       meta: {
         title: "测试表格Crud"
+        // requireAuth: true
+      }
+    },
+    {
+      path: '/coreList',
+      component: () => import('@/view/core/list'),
+      meta: {
+        title: "测试core"
         // requireAuth: true
       }
     },
