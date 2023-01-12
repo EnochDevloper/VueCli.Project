@@ -31,7 +31,8 @@
             <el-row>
                 <el-col :span="12">
                     <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="total"
-                        @size-change="SizeChange" @current-change="CurrentChange">
+                        :page-sizes="pagesizeGroup" :page-size="pageSize" @size-change="SizeChange"
+                        @current-change="CurrentChange">
                     </el-pagination>
                 </el-col>
                 <el-col :span="12"></el-col>
@@ -56,7 +57,8 @@ export default {
             total: 0,
             currentPage: 1,
             pageSize: 10,
-            tableHeight: 560
+            tableHeight: 500,
+            pagesizeGroup: [2, 5, 10, 15, 20, 50, 100]
         };
     },
     created() {

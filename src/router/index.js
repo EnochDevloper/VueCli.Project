@@ -79,7 +79,7 @@ const router = new Router({
       path: '/index',
       component: () => import('@/view/studnet/stuList'),
       meta: {
-        requireAuth: true,
+        // requireAuth: true,
         title: "学生列表"
       }
     },
