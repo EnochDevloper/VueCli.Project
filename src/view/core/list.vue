@@ -9,6 +9,15 @@
                     </div>
                 </el-col>
             </el-row>
+            <el-row style="text-align:left;">
+                <el-col :span="12">
+                    <label>姓名</label>
+                    <el-input placeholder="请输入姓名" v-model="inputName" clearable style="width:150px"></el-input>
+                    <label>地址</label>
+                    <el-input placeholder="请输入地址" v-model="inputAddress" clearable style="width:150px"></el-input>
+                    <el-button type="primary" @click="GetList" plain>查找</el-button>
+                </el-col>
+            </el-row>
             <el-row>
                 <el-col :span="12">
                     <div>
@@ -47,7 +56,7 @@ import qs from "qs";
 import { formatDate, parseTime1 } from "@/utils/date";
 import { OperatingTable } from "@/api/StudentApi";
 import { shortTime, time1 } from "@/utils/dateTools";
-// axios.defaults.baseURL = `http://localhost:14346/api/`;
+import Q from 'q';
 export default {
     data() {
         return {
@@ -58,7 +67,9 @@ export default {
             currentPage: 1,
             pageSize: 10,
             tableHeight: 500,
-            pagesizeGroup: [2, 5, 10, 15, 20, 50, 100]
+            pagesizeGroup: [2, 5, 10, 15, 20, 50, 100],
+            inputName: "",
+            inputAddress: ""
         };
     },
     created() {
@@ -67,6 +78,25 @@ export default {
     methods: {
         GetList() {
             var _this = this;
+
+            var search = [];
+            if (_this.inputName) {
+                search.push({ property: "s_name", method: "Contains", value: _this.inputName })
+            }
+            if (_this.inputAddress) {
+                search.push({ property: "s_addrress", method: "equal", value: _this.inputAddress })
+            }
+            var newstr = qs.stringify(search);
+            var new_str = JSON.stringify(search);
+            // if (newstr) {
+            //     this.searchs = decodeURIComponent(newstr);
+            //     var reg = new RegExp("0", "g"); //创建正则RegExp对象   
+            //     // var reg = new RegExp("]", "g"); //创建正则RegExp对象   
+            //     var newstr1 = this.searchs;
+            //     this.searchs = newstr1.replace(reg, "").replace(/\[|]/g, '');
+
+            // }
+            this.searchs = new_str;
             var params = {
                 pageIndex: _this.currentPage,
                 pageSize: _this.pageSize,
@@ -77,7 +107,7 @@ export default {
 
             OperatingTable(url, params).then((res) => {
                 if (res.status == 200) {
-                    this.tableData = res.data.rows;
+                    _this.tableData = res.data.rows;
                     _this.total = res.data.total;
                 }
             });
